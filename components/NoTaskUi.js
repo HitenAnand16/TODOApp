@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 45,
   },
   noTaskText: {
-    fontSize: 45,
+    fontSize: 40,
     fontWeight: "bold",
     color: "#424242",
   },
@@ -65,12 +65,12 @@ const styles = StyleSheet.create({
     color: "#616161",
   },
   addTask: {
-    fontSize: 40,
+    fontSize: 36,
     color: "#424242",
   },
   profileImage: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 50,
     marginRight: 8,
     borderWidth: 1,

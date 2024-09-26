@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { View, Animated, StyleSheet } from "react-native";
 import { useRecoilState } from "recoil";
+import { StatusBar } from "expo-status-bar";
 import { taskListState } from "../recoil/atoms";
 import TaskInput from "../components/TaskInput";
 import TaskList from "../components/TaskList";
@@ -59,6 +60,7 @@ const HomeScreen = ({ userProfile }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light" />
       {tasks.length === 0 ? (
         <NoTaskUI userProfile={userProfile} />
       ) : (

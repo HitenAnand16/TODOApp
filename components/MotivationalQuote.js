@@ -21,14 +21,17 @@ const MotivationalQuote = () => {
 
 const styles = StyleSheet.create({
   quoteContainer: {
-    padding: 20,
-    backgroundColor: "#F2F1EB",
+    // padding: 20,
+    // backgroundColor: "#F2F1EB",
     borderRadius: 10,
-    marginBottom: 20,
+    margin: 20,
+    position: "absolute",
+    bottom: 0,
+    alignSelf: "center",
   },
   quoteText: {
     fontSize: 18,
-    color: "#424242",
+    color: "#F2F1EB",
     textAlign: "center",
   },
 });

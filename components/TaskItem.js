@@ -7,24 +7,24 @@ const getPriorityStyles = (priority) => {
   switch (priority) {
     case "High":
       return {
-        borderColor: "#ffcccc",
+        borderColor: "#F2F1EB",
         borderWidth: 2,
-        backgroundColor: "#fff",
-        height: 100,
+        backgroundColor: "#FF9B9B",
+        // height: 80,
       };
     case "Medium":
       return {
-        borderColor: "#ffe6cc",
+        borderColor: "#F2F1EB",
         borderWidth: 2,
-        backgroundColor: "#fff",
-        height: 100,
+        backgroundColor: "#FCDC94",
+        // height: 80,
       };
     case "Low":
       return {
-        borderColor: "#ccffcc",
+        borderColor: "#F2F1EB",
         borderWidth: 2,
-        backgroundColor: "#fff",
-        height: 100,
+        backgroundColor: "#D1E9F6",
+        // height: 80,
       };
     default:
       return {
@@ -73,7 +73,7 @@ const TaskItem = ({ task, toggleTaskCompletion, deleteTask }) => {
   };
 
   return (
-    <View>
+    <View style={styles.gridItem}>
       <View
         style={[
           styles.container,
@@ -92,21 +92,30 @@ const TaskItem = ({ task, toggleTaskCompletion, deleteTask }) => {
         >
           <View style={styles.iconContainer}>
             {task.completed ? (
-              <Ionicons name="checkmark-circle" size={28} color="#4CAF50" /> // Green check for completed
+              <Ionicons name="checkmark-circle" size={20} color="#79AC78" /> // Green check for completed
             ) : (
-              <Ionicons name="ellipse-outline" size={28} color="#cccccc" /> // Hollow circle for not completed
+              <Ionicons name="ellipse-outline" size={20} color="gray" /> // Hollow circle for not completed
             )}
           </View>
           <View style={styles.textContainer}>
             <Text style={[styles.text, task.completed && styles.completed]}>
               {task.text.toUpperCase()}
             </Text>
-            <Text style={styles.priorityText}>Priority: {task.priority}</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={confirmDelete} style={styles.deleteButton}>
-          <Ionicons name="trash" size={24} color="#FF3D00" />
-        </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text style={styles.priorityText}>Priority: {task.priority}</Text>
+          <TouchableOpacity onPress={confirmDelete} style={styles.deleteButton}>
+            <Ionicons name="trash" size={18} color="#FF3D00" />
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.separator} />
       </View>
     </View>
@@ -115,36 +124,40 @@ const TaskItem = ({ task, toggleTaskCompletion, deleteTask }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 20,
+    // flexDirection: "row", // Align children horizontally
+    flexWrap: "wrap", // Allow children to wrap onto the next line
+    // alignItems: "flex-start", // Align items at the top
+    // justifyContent: "space-between", // Adjust space between items
+    padding: 10,
     borderRadius: 15,
-    marginHorizontal: 10,
-    marginVertical: 6,
+    marginHorizontal: 4,
+    marginVertical: 4,
     backgroundColor: "#f9f9f9",
     elevation: 3,
+  },
+  gridItem: {
+    width: "50%",
   },
   taskContainer: {
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
-    padding: 10,
+    marginVertical: 15,
   },
   iconContainer: {
-    marginRight: 15,
+    marginRight: 5,
   },
   textContainer: {
     flex: 1,
   },
   text: {
-    fontSize: 24,
+    fontSize: 18,
     color: "#333",
-    fontWeight: "bold",
+    fontWeight: "800",
   },
   priorityText: {
-    fontSize: 16,
-    color: "#555",
+    fontSize: 14,
+    color: "#333",
   },
   descriptionText: {
     fontSize: 14,
@@ -152,7 +165,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   dueDateText: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#888",
     marginTop: 2,
   },
@@ -163,23 +176,26 @@ const styles = StyleSheet.create({
   deadlineCircle: {
     borderRadius: 100,
     backgroundColor: "#444",
-    justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    width: "100%",
   },
   deadlineDate: {
-    fontSize: 24,
-    color: "#fff",
+    fontSize: 12,
+    color: "#F2F1EB",
     fontWeight: "bold",
   },
   deadlineDay: {
-    fontSize: 18,
-    color: "#fff",
+    fontSize: 12,
+    color: "#F2F1EB",
+    fontWeight: "bold",
   },
   completed: {
     textDecorationLine: "line-through",
-    color: "#aaa",
+    color: "#F2F1EB",
   },
   deleteButton: {
     justifyContent: "center",

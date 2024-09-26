@@ -1,10 +1,14 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useRecoilValue } from "recoil";
+import { userProfileState } from "../recoil/userProfileAtom"; // Import the user profile atom
 
 const Greeting = () => {
   // Get today's date
   const today = new Date();
+
+  const userProfile = useRecoilValue(userProfileState); // Get user profile from Recoil
 
   // Function to format date
   const formatDate = (date) => {
@@ -36,22 +40,32 @@ const Greeting = () => {
   return (
     <View style={styles.greetingContainer}>
       <View>
-        <Text style={styles.noTaskText}>Hello 👋 Hiten</Text>
-        <Text style={styles.addTask}>Welcome Back!</Text>
-        <Text style={styles.dateText}>{formatDate(today)}</Text>
+        <Text style={styles.noTaskText}>
+          Hello 👋 {userProfile.name || "User"}
+        </Text>
+        <Text style={styles.addTask}>Welcome Back! - {formatDate(today)}</Text>
       </View>
       <View>
-        <MaterialIcons
-          name="supervised-user-circle"
-          size={35}
-          style={{ color: "#F2F1EB" }}
-        />
+        {userProfile.picture ? (
+          <Image
+            source={{ uri: userProfile.picture }}
+            style={styles.profileImage}
+          />
+        ) : null}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: "#F2F1EB",
+  },
   greetingContainer: {
     marginHorizontal: 10,
     flexDirection: "row",
@@ -65,7 +79,7 @@ const styles = StyleSheet.create({
     color: "#F2F1EB",
   },
   addTask: {
-    fontSize: 24,
+    fontSize: 18,
     color: "#F2F1EB",
   },
   dateText: {

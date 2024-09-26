@@ -9,7 +9,6 @@ import PendingTasksScreen from "./screens/PendingTasksScreen";
 import UserProfileScreen from "./screens/UserProfileScreen";
 import { RecoilRoot } from "recoil";
 import { StatusBar } from "expo-status-bar";
-
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 

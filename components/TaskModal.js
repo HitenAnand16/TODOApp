@@ -5,30 +5,39 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker"; // Assuming this is used for picking date/time
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const TaskModal = ({ visible, onClose, addTask, task, setTask }) => {
-  const [priority, setPriority] = useState("Low"); // Default priority
-  const [deadline, setDeadline] = useState(null); // State for deadline (null or date)
-  const [showDatePicker, setShowDatePicker] = useState(false); // State to show/hide date picker
-  const [isNaSelected, setIsNaSelected] = useState(false); // State to track 'NA' selection
+  const [priority, setPriority] = useState("Low");
+  const [deadline, setDeadline] = useState(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isNaSelected, setIsNaSelected] = useState(false);
 
   const handlePriorityChange = (level) => {
     setPriority(level);
   };
 
   const handleAddTask = () => {
+    if (!task.trim()) {
+      alert("Please add a task before proceeding.");
+      return;
+    }
+
     const newTask = {
       text: task,
-      priority: priority, // or your current priority state
-      deadline, // Pass the selected deadline
+      priority: priority,
+      deadline,
     };
+
     addTask(newTask);
-    setTask(""); // Clear task input after adding
-    setDeadline(new Date()); // Reset deadline
-    onClose(); // Close the modal
+    setTask("");
+    setDeadline(new Date());
+    onClose();
   };
 
   const showDateTimePicker = () => {
@@ -38,120 +47,137 @@ const TaskModal = ({ visible, onClose, addTask, task, setTask }) => {
   const onDateChange = (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) {
-      setDeadline(selectedDate); // Store the selected date
-      setIsNaSelected(false); // Unselect 'NA' if a date is chosen
-      console.log("Selected deadline:", selectedDate); // Log the selected date
+      setDeadline(selectedDate);
+      setIsNaSelected(false);
+      console.log("Selected deadline:", selectedDate);
     }
   };
 
   if (!visible) return null;
 
   return (
-    <View style={styles.modalContainer}>
-      <View style={styles.card}>
-        <Text style={styles.title}>Add New Task</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Task description..."
-          value={task}
-          onChangeText={setTask}
-          placeholderTextColor="#888"
-        />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.modalContainer}>
+        <KeyboardAvoidingView
+          behavior="padding" // Adjusts based on the platform
+          style={styles.keyboardAvoidingView}
+        >
+          <View style={styles.card}>
+            <Text style={styles.title}>Add New Task</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Task description..."
+              value={task}
+              onChangeText={setTask}
+              placeholderTextColor="#888"
+            />
 
-        {/* Priority Buttons */}
-        <View style={styles.priorityContainer}>
-          <TouchableOpacity
-            style={[
-              styles.priorityButton,
-              priority === "Low" && styles.selectedPriority,
-            ]}
-            onPress={() => handlePriorityChange("Low")}
-          >
-            <Text style={styles.priorityText}>Low</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.priorityButton,
-              priority === "Medium" && styles.selectedPriority,
-            ]}
-            onPress={() => handlePriorityChange("Medium")}
-          >
-            <Text style={styles.priorityText}>Medium</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.priorityButton,
-              priority === "High" && styles.selectedPriority,
-            ]}
-            onPress={() => handlePriorityChange("High")}
-          >
-            <Text style={styles.priorityText}>High</Text>
-          </TouchableOpacity>
-        </View>
+            {/* Priority Buttons */}
+            <View style={styles.priorityContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.priorityButton,
+                  priority === "Low" && styles.selectedPriority,
+                ]}
+                onPress={() => handlePriorityChange("Low")}
+              >
+                <Text style={styles.priorityText}>Low</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.priorityButton,
+                  priority === "Medium" && styles.selectedPriority,
+                ]}
+                onPress={() => handlePriorityChange("Medium")}
+              >
+                <Text style={styles.priorityText}>Medium</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.priorityButton,
+                  priority === "High" && styles.selectedPriority,
+                ]}
+                onPress={() => handlePriorityChange("High")}
+              >
+                <Text style={styles.priorityText}>High</Text>
+              </TouchableOpacity>
+            </View>
 
-        {/* Deadline selection */}
-        <View style={styles.deadlineContainer}>
-          <TouchableOpacity
-            onPress={showDateTimePicker}
-            style={styles.deadlineButton}
-          >
-            <Text style={styles.deadlineText}>
-              {deadline
-                ? `Deadline: ${deadline.toLocaleString()}`
-                : "Select Deadline"}
-            </Text>
-          </TouchableOpacity>
+            {/* Deadline selection */}
+            <View style={styles.deadlineContainer}>
+              <TouchableOpacity
+                onPress={showDateTimePicker}
+                style={styles.deadlineButton}
+              >
+                <Text style={styles.deadlineText}>
+                  {deadline
+                    ? `Deadline: ${deadline.toLocaleString()}`
+                    : "Select Deadline"}
+                </Text>
+              </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              setIsNaSelected(true);
-              setDeadline(null); // Reset the deadline if 'NA' is selected
-            }}
-            style={[
-              styles.deadlineButton,
-              isNaSelected && styles.selectedNaButton,
-            ]}
-          >
-            <Text style={styles.deadlineText}>No Deadline (NA)</Text>
-          </TouchableOpacity>
-        </View>
+              <TouchableOpacity
+                onPress={() => {
+                  setIsNaSelected(true);
+                  setDeadline(null);
+                }}
+                style={[
+                  styles.deadlineButton,
+                  isNaSelected && styles.selectedNaButton,
+                ]}
+              >
+                <Text style={styles.deadlineText}>No Deadline (NA)</Text>
+              </TouchableOpacity>
+            </View>
 
-        {showDatePicker && (
-          <DateTimePicker
-            value={new Date()} // This can be adjusted to a default value
-            mode="datetime"
-            is24Hour={true}
-            display="default"
-            onChange={onDateChange}
-          />
-        )}
+            {showDatePicker && (
+              <DateTimePicker
+                value={new Date()}
+                mode="datetime"
+                is24Hour={true}
+                display="default"
+                onChange={onDateChange}
+              />
+            )}
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.addButton} onPress={handleAddTask}>
-            <Text style={styles.buttonText}>Add Task</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Ionicons name="close" size={24} color="#FF3D00" />
-          </TouchableOpacity>
-        </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={handleAddTask}
+              >
+                <Text style={styles.buttonText}>Add Task</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+                <Ionicons name="close" size={24} color="#FF3D00" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonText: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "white",
+  },
   modalContainer: {
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Overlay background
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
-  card: {
+  keyboardAvoidingView: {
     width: "90%",
+  },
+  card: {
     backgroundColor: "#ffffff",
     borderRadius: 15,
     padding: 20,
@@ -186,10 +212,9 @@ const styles = StyleSheet.create({
   addButton: {
     backgroundColor: "#388e3c",
     borderRadius: 10,
-    padding: 10,
     flex: 1,
     alignItems: "center",
-    marginRight: 10,
+    justifyContent: "center",
   },
   closeButton: {
     padding: 10,
@@ -217,8 +242,6 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   deadlineContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     marginVertical: 10,
   },
   deadlineButton: {
@@ -226,13 +249,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     borderRadius: 10,
     marginHorizontal: 5,
+    marginVertical: 5,
   },
   deadlineText: {
     fontWeight: "bold",
     color: "#333",
   },
   selectedNaButton: {
-    backgroundColor: "#ffcccc", // Highlight when NA is selected
+    backgroundColor: "#ffcccc",
   },
 });
 
