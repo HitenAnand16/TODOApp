@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   deadlineCircle: {
     borderRadius: 100,
-    backgroundColor: "#444",
+    backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -185,12 +185,12 @@ const styles = StyleSheet.create({
   },
   deadlineDate: {
     fontSize: 12,
-    color: "#F2F1EB",
+    color: "#444",
     fontWeight: "bold",
   },
   deadlineDay: {
     fontSize: 12,
-    color: "#F2F1EB",
+    color: "#444",
     fontWeight: "bold",
   },
   completed: {

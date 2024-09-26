@@ -16,6 +16,8 @@ import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userProfileState } from "../recoil/userProfileAtom"; // Import the user profile atom
+import AnimatedHeader from "../components/AnimatedHeader"; // Import the AnimatedHeader component\
+import IntroInputs from "../components/IntroInputs";
 
 const UserProfileScreen = () => {
   const [name, setName] = useState("");
@@ -56,21 +58,8 @@ const UserProfileScreen = () => {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.inner}>
-          <Text style={styles.header}>Create Your Profile</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your name"
-            placeholderTextColor="#CCC" // Placeholder text in a lighter gray
-            value={name}
-            onChangeText={setName}
-          />
-          <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
-            <Text style={styles.buttonText}>Pick an image</Text>
-          </TouchableOpacity>
-          {image && <Image source={{ uri: image }} style={styles.image} />}
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.buttonText}>Submit</Text>
-          </TouchableOpacity>
+          <AnimatedHeader />
+          <IntroInputs />
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -80,66 +69,9 @@ const UserProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#181C14", // Dark background color
   },
   inner: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
-  header: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#f9f9f9", // Text color for header
-    marginBottom: 10,
-  },
-  subHeader: {
-    fontSize: 18,
-    color: "#f9f9f9", // Text color for sub-header
-    marginBottom: 20,
-  },
-  input: {
-    height: 50,
-    borderColor: "#A0D468", // Light green border color
-    borderWidth: 2,
-    borderRadius: 8,
-    marginBottom: 20,
-    paddingHorizontal: 15,
-    width: "100%",
-    backgroundColor: "#f9f9f9",
-    color: "black",
-    fontSize: 16,
-  },
-  pickButton: {
-    backgroundColor: "#f9f9f9", // Button background color
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    marginBottom: 10,
-    width: "100%",
-    alignItems: "center",
-  },
-  submitButton: {
-    backgroundColor: "#f9f9f9", // Button background color
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    width: "100%",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#1A1A1A", // Text color for buttons
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  image: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    margin: 20,
-    borderColor: "#A0D468", // Border color matching the logo
-    borderWidth: 2,
   },
 });
 
