@@ -1,5 +1,5 @@
 // HomeScreen.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Animated, StyleSheet } from "react-native";
 import { useRecoilState } from "recoil";
 import { StatusBar } from "expo-status-bar";
@@ -9,13 +9,33 @@ import TaskList from "../components/TaskList";
 import NoTaskUI from "../components/NoTaskUi";
 import FloatingActionButton from "../components/FloatingActionButton";
 import TaskModal from "../components/TaskModal";
+import { getTasks, saveTasks } from "../storage/storage"; // Import the storage functions
 
 const HomeScreen = ({ userProfile }) => {
   const [task, setTask] = useState("");
-  const [priority, setPriority] = useState("Low"); // State for priority
+  const [priority, setPriority] = useState("Low");
   const [tasks, setTasks] = useRecoilState(taskListState);
   const [isAdding, setIsAdding] = useState(false);
   const rotation = useState(new Animated.Value(0))[0];
+
+  // Load tasks from local storage when the component mounts
+  useEffect(() => {
+    const loadTasks = async () => {
+      const savedTasks = await getTasks();
+      setTasks(savedTasks);
+    };
+
+    loadTasks();
+  }, []); // Empty dependency array to run only once
+
+  // Save tasks to local storage whenever the task list updates
+  useEffect(() => {
+    const saveTasksToStorage = async () => {
+      await saveTasks(tasks);
+    };
+
+    saveTasksToStorage();
+  }, [tasks]); // Runs every time tasks change
 
   const addTask = (newTask) => {
     if (newTask.text) {
@@ -26,12 +46,12 @@ const HomeScreen = ({ userProfile }) => {
           text: newTask.text,
           completed: false,
           priority: newTask.priority,
-          deadline: newTask.deadline, // Include the deadline
+          deadline: newTask.deadline,
         },
       ]);
-      setTask(""); // Clear task input after adding
-      setIsAdding(false); // Close the modal after adding
-      rotateIcon(); // Rotate icon for animation
+      setTask("");
+      setIsAdding(false);
+      rotateIcon();
     }
   };
 
@@ -75,11 +95,11 @@ const HomeScreen = ({ userProfile }) => {
         task={task}
         setTask={setTask}
         addTask={addTask}
-        setPriority={setPriority} // Pass setPriority to TaskModal
+        setPriority={setPriority}
         onClose={() => {
           setIsAdding(false);
-          setTask(""); // Clear task input when closing
-          setPriority("Low"); // Reset priority when closing
+          setTask("");
+          setPriority("Low");
         }}
       />
       <FloatingActionButton

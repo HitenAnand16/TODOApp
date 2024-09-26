@@ -13,26 +13,37 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { userProfileState } from "../recoil/userProfileAtom";
-import AnimatedHeader from "../components/AnimatedHeader";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import { defaultStyles } from "../constants/Styles";
-import { BlurView } from "expo-blur";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
 
 const UserProfileScreen = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState(null);
   const navigation = useNavigation();
-  const userProfile = useRecoilValue(userProfileState);
-  const setUserProfile = useSetRecoilState(userProfileState);
+  const [userProfile, setUserProfile] = useRecoilState(userProfileState);
 
   useEffect(() => {
-    if (userProfile.name && userProfile.picture) {
-      navigation.navigate("MainTabs");
-    }
-  }, [userProfile, navigation]);
+    // Load profile from AsyncStorage if it exists
+    const loadUserProfile = async () => {
+      try {
+        const storedProfile = await AsyncStorage.getItem("userProfile");
+        if (storedProfile) {
+          const parsedProfile = JSON.parse(storedProfile);
+          setUserProfile(parsedProfile);
+          setName(parsedProfile.name);
+          setImage(parsedProfile.picture);
+          navigation.navigate("MainTabs");
+        }
+      } catch (error) {
+        console.log("Failed to load profile:", error);
+      }
+    };
+    loadUserProfile();
+  }, [navigation, setUserProfile]);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -47,9 +58,16 @@ const UserProfileScreen = () => {
     }
   };
 
-  const handleSubmit = () => {
-    setUserProfile({ name, picture: image });
-    navigation.navigate("MainTabs");
+  const handleSubmit = async () => {
+    const profileData = { name, picture: image };
+    setUserProfile(profileData);
+    try {
+      // Save profile to AsyncStorage
+      await AsyncStorage.setItem("userProfile", JSON.stringify(profileData));
+      navigation.navigate("MainTabs");
+    } catch (error) {
+      console.log("Failed to save profile:", error);
+    }
   };
 
   return (
@@ -146,6 +164,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     width: "100%",
     borderRadius: 10,
+    marginBottom: 10,
   },
   btnDarkText: {
     color: "#fff",
