@@ -70,6 +70,12 @@ const UserProfileScreen = () => {
     }
   };
 
+  // New function to clear the inputs and image
+  const handleClear = () => {
+    setName("");
+    setImage(null);
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -99,18 +105,35 @@ const UserProfileScreen = () => {
               <Text style={styles.btnDarkText}>Pick an image</Text>
             </TouchableOpacity>
             {image && <Image source={{ uri: image }} style={styles.image} />}
-            <TouchableOpacity
-              style={[defaultStyles.btn, styles.btnDark]}
-              onPress={handleSubmit}
-            >
-              <Ionicons
-                name="checkmark"
-                size={20}
-                style={styles.btnIcon}
-                color={"#fff"}
-              />
-              <Text style={styles.btnDarkText}>Submit</Text>
-            </TouchableOpacity>
+
+            {/* Button Container to place buttons side by side */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[defaultStyles.btn, styles.btnDark, styles.button]}
+                onPress={handleSubmit}
+              >
+                <Ionicons
+                  name="checkmark"
+                  size={20}
+                  style={styles.btnIcon}
+                  color={"#fff"}
+                />
+                <Text style={styles.btnDarkText}>Submit</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[defaultStyles.btn, styles.btnClear, styles.button]}
+                onPress={handleClear}
+              >
+                <Ionicons
+                  name="close"
+                  size={20}
+                  style={styles.btnIcon}
+                  color={"#fff"}
+                />
+                <Text style={styles.btnClearText}>Clear</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -170,6 +193,20 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
   },
+  btnClear: {
+    backgroundColor: "#FF6F61",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 15,
+    width: "100%",
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  btnClearText: {
+    color: "#fff",
+    fontSize: 20,
+  },
   btnIcon: {
     paddingRight: 10,
   },
@@ -180,6 +217,15 @@ const styles = StyleSheet.create({
     margin: 10,
     borderColor: "#A0D468",
     borderWidth: 2,
+  },
+  buttonContainer: {
+    flexDirection: "row", // Align buttons side by side
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 5, // Add some space between the buttons
   },
 });
 
